@@ -11,8 +11,8 @@ Kurly Design Base 팀의 Claude Code 플러그인 마켓플레이스입니다.
 ## 설치
 
 ```
-/plugin marketplace add <owner>/design-base
-/plugin install mock-ui@design-base
+/plugin marketplace add hamtolchu/mao-plugin
+/plugin install mock-ui@mao-plugin
 ```
 
 ## mock-ui 사용 전 준비

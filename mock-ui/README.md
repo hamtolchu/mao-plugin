@@ -39,8 +39,11 @@ source ~/.zshenv  # 또는 새 터미널 열기
 
 ## 3단계: 플러그인 설치
 
-```bash
-claude plugin install /Users/mk-am16-075/personal/design-base/mock-ui
+Claude Code 안에서 다음을 실행합니다.
+
+```
+/plugin marketplace add hamtolchu/mao-plugin
+/plugin install mock-ui@mao-plugin
 ```
 
 설치 후 Claude Code를 재시작하면 `/mock-ui` 커맨드가 활성화됩니다.
