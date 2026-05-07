@@ -1,0 +1,14 @@
+{
+  "name": "mock-ui-plugin",
+  "version": "1.0.0",
+  "description": "Mock UI generator plugin for Claude Code",
+  "private": true,
+  "scripts": {
+    "test:slug": "node scripts/slug.js \"테스트 화면 설명\"",
+    "test:archive": "node scripts/archive.js list",
+    "test:build": "echo 'Boilerplate is fetched from GitHub at runtime. Run /mock-ui to test end-to-end.' && exit 0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
