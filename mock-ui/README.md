@@ -52,7 +52,7 @@ Claude Code 안에서 다음을 실행합니다.
 
 ## 사용법
 
-### Mock UI 생성
+### 1단계: Mock UI 로컬 생성
 
 ```
 /mock-ui 회원가입 화면 — 이메일, 비밀번호 입력 + 약관 동의 체크박스 + 가입 버튼
@@ -66,12 +66,45 @@ Claude Code 안에서 다음을 실행합니다.
 /mock-ui 마이페이지 — 좌측 사이드바 네비게이션 + 우측 프로필 정보 편집 폼
 ```
 
-성공 시 결과:
+성공 시 결과 (배포 전 로컬 미리보기):
 ```
-✓ Mock UI 생성 완료
+✓ Mock UI 로컬 생성 완료 (아직 배포되지 않음)
 
-URL:    https://mock-2026-05-07-signup-a3f.vercel.app
-Local:  ~/.mock-ui-archive/2026-05-07-signup-a3f/
+Preview: http://localhost:3000
+Local:   ~/.mock-ui-archive/2026-05-07-signup-a3f/
+Slug:    2026-05-07-signup-a3f
+
+다음 단계:
+- 브라우저에서 Preview URL을 열어 결과를 확인하세요
+- 수정이 필요하면 자연어로 알려주세요
+- 만족하시면 /mock-ui-redeploy 2026-05-07-signup-a3f 로 Vercel 배포하세요
+```
+
+### 2단계: 검토 및 수정 (선택)
+
+브라우저에서 미리보기를 확인한 뒤, 수정이 필요하면 Claude에게 자연어로 요청합니다:
+
+```
+헤더에 알림 아이콘 추가해줘
+```
+
+```
+테이블 행 색상을 번갈아 적용해줘 (zebra stripe)
+```
+
+파일을 저장하면 브라우저에 즉시 반영됩니다 (HMR).
+
+### 3단계: Vercel 배포
+
+검토가 완료되면 명시적으로 배포합니다:
+
+```
+/mock-ui-redeploy 2026-05-07-signup-a3f
+```
+
+성공 시 prod URL이 반환됩니다:
+```
+URL: https://mock-2026-05-07-signup-a3f.vercel.app
 ```
 
 ### 생성 목록 조회
@@ -80,12 +113,10 @@ Local:  ~/.mock-ui-archive/2026-05-07-signup-a3f/
 /mock-ui-list
 ```
 
-### 로컬 수정 후 재배포
-
-로컬 아카이브의 코드를 수정한 뒤:
+### Dev 서버 정지
 
 ```
-/mock-ui-redeploy 2026-05-07-signup-a3f
+/mock-ui-stop 2026-05-07-signup-a3f
 ```
 
 ---
@@ -119,5 +150,11 @@ Local:  ~/.mock-ui-archive/2026-05-07-signup-a3f/
 **vercel 커맨드 없음**: `npm install -g vercel` 실행.
 
 **빌드 실패**: `~/.mock-ui-archive/<slug>/` 경로를 열어 `npm run build` 직접 실행해 에러 확인.
+
+**Dev 서버 포트 충돌**: 3000-3010 포트가 모두 사용 중이면 에러가 납니다. `lsof -i :3000-3010`으로 사용 현황 확인 후 여유 포트를 확보하세요.
+
+**좀비 dev 서버 정리**: Claude Code 세션이 비정상 종료된 경우 dev 서버가 남아있을 수 있습니다. `/mock-ui-stop <slug>`로 정지하거나, `cat ~/.mock-ui-archive/<slug>/.dev-server.pid`로 PID를 확인해 수동으로 `kill <PID>` 하세요.
+
+**Dev 서버 로그 확인**: `cat ~/.mock-ui-archive/<slug>/.dev-server.log`에서 dev 서버의 전체 로그를 볼 수 있습니다.
 
 **플러그인 위치 탐지 실패**: `find ~/.claude/plugins -name "mock-ui-builder.md"` 로 설치 경로 확인.

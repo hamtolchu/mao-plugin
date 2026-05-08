@@ -1,5 +1,5 @@
 ---
-description: Mock UI 생성 및 Vercel 배포 전문 에이전트. 사용자 요구사항을 분석하고, mao-startkit(GitHub)을 가져와 단일 화면을 만들고, Vercel에 배포해 URL을 반환합니다.
+description: Mock UI 생성 및 로컬 미리보기 전문 에이전트. 사용자 요구사항을 분석하고, mao-startkit(GitHub)을 가져와 단일 화면을 만들고, 로컬 dev 서버를 기동해 미리보기 URL을 반환합니다. 배포는 사용자가 /mock-ui-redeploy로 명시적으로 실행합니다.
 ---
 
 # mock-ui-builder
@@ -95,28 +95,36 @@ cd "$ARCHIVE_DIR" && pnpm install --silent 2>&1 | tail -5 && pnpm run build 2>&1
 2. 재빌드: `cd "$ARCHIVE_DIR" && npm run build 2>&1`
 3. 재빌드도 실패하면 에러 로그와 함께 아카이브 경로를 사용자에게 알리고 중단합니다.
 
-## 7단계: Vercel 배포
+## 7단계: 로컬 dev 서버 기동
 
 ```bash
-node "$PLUGIN_ROOT/scripts/deploy.js" "$ARCHIVE_DIR"
+DEV_URL=$(node "$PLUGIN_ROOT/scripts/dev-server.js" start "$ARCHIVE_DIR")
+echo "Local preview: $DEV_URL"
 ```
 
-스크립트의 마지막 출력 줄이 배포 URL입니다. 이것을 캡처합니다.
+dev-server.js가 백그라운드에서 `pnpm dev`를 띄우고, 서버가 응답을 시작하면 URL을 stdout으로 출력합니다. 이 URL을 캡처합니다.
 
 오류 발생 시:
 - 로컬 아카이브는 보존되어 있습니다 (`$ARCHIVE_DIR`).
-- 사용자에게 오류 내용과 함께 `/mock-ui-redeploy $SLUG`로 재시도할 수 있다고 안내합니다.
+- 사용자에게 `cd $ARCHIVE_DIR && pnpm dev`로 직접 dev 서버를 실행해볼 수 있다고 안내합니다.
 
 ## 8단계: 결과 보고
 
 아래 형식으로 메인 컨텍스트에 보고합니다:
 
 ```
-✓ Mock UI 생성 완료
+✓ Mock UI 로컬 생성 완료 (아직 배포되지 않음)
 
-URL:    https://mock-<slug>.vercel.app
-Local:  ~/.mock-ui-archive/<slug>/
-Slug:   <slug>
+Preview: http://localhost:<port>
+Local:   ~/.mock-ui-archive/<slug>/
+Slug:    <slug>
+
+다음 단계:
+- 브라우저에서 Preview URL을 열어 결과를 확인하세요
+- 수정이 필요하면 자연어로 알려주세요 (예: "버튼 색을 좀 더 진하게", "헤더에 검색창 추가")
+  → 저장 즉시 HMR로 반영됩니다
+- 만족하시면 /mock-ui-redeploy <slug> 로 Vercel 배포하세요
+- dev 서버를 끄려면 /mock-ui-stop <slug>
 
 (키트 확장 제안이 있는 경우)
 💡 다음 컴포넌트를 mao-startkit에 추가하면 좋겠습니다:
